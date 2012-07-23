@@ -1,0 +1,35 @@
+--- name:mbeam
+# no documentation available for this property
+config: 
+  mode: MODELINEAR
+  rec83p: 1
+  rec837: 0
+  profMinRange: 0
+  noBeams: NUMBER120
+  range: RANGE5
+  ctrl: EXTERNALCONTROL
+  averaging: 5
+  beamWidth: WIDTHNORMAL
+  gainEQ: 1
+  xdcrUpDn: XDRCDOWN
+  soundVelocity: 1500
+  profFilter: BOTTOMFOLLOW
+  out83p83b: OUT83B
+  trans: TRANSREC
+  profPtEnable: 0
+  profTilt: 0
+  profMinLev: 10
+  sectorSize: SEC120
+  dispGain: 50
+  gain: 6
+# no documentation available for this property
+io_port: udpserver://4040
+# the timeout on read. Defaults to one second
+io_read_timeout: 
+  microseconds: 2000000
+# the interval at which the status port should be written. Defaults to one second
+io_status_interval: 
+  microseconds: 1000000
+# the timeout on write. Defaults to one second. Used only in direct I/O mode
+io_write_timeout: 
+  microseconds: 1000000
