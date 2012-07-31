@@ -64,8 +64,9 @@ bool Task::startHook()
 void Task::updateHook()
 {
   try{
-    mDriver->collectData();
     mDriver->sendExtCmd();
+    mDriver->collectData();
+    _mbeam_scan.write(mDriver->getData());
     TaskBase::updateHook();
   } catch(std::runtime_error &e){
     LOG_DEBUG("exception %s",e.what());

@@ -9,6 +9,7 @@ import_types_from 'aggregator'
 import_types_from "mbeam_imagenex/MBeamTypes.hpp"
 import_types_from "mbeam_imagenex/MBeamRaw.hpp"
 import_types_from "mbeam_imagenex/Config.hpp"
+import_types_from "base/samples/sonar_scan.h"
 
 
 
@@ -26,6 +27,9 @@ task_context "Task" do
     error_states :COMM_ERROR
     
     property "config", "mbeam_imagenex/Config"
+    
+    output_port("mbeam_scan","base::samples::SonarScan")
+    
     periodic(0.1)
 end
 

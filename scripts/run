@@ -11,8 +11,9 @@ optparse = OptionParser.new do |opt|
         gui = true
     end
 end
-io_port = *optparse.parse(ARGV)
-if !io_port
+
+dev_id = *optparse.parse(ARGV)
+if !dev_id
     puts optparse
     exit 1
 end
@@ -25,10 +26,9 @@ Orocos.run 'mbeam_imagenex::Task' => 'mbeam' do
     Orocos.logger.level = Logger::DEBUG
     Orocos.log_all
     puts "deployed the alt_imagenex::Task task"
-
     mbeam = Orocos::TaskContext.get 'mbeam'
-    mbeam.io_port = io_port
     mbeam.io_read_timeout = Time.at(2);
+    Orocos.apply_conf_file(mbeam, 'mbeam.yml', [dev_id])
     mbeam.configure
     mbeam.start
 

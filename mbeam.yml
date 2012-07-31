@@ -5,7 +5,7 @@ config:
   rec83p: 1
   rec837: 0
   profMinRange: 0
-  noBeams: NUMBER120
+  noBeams: NUMBER480
   range: RANGE5
   ctrl: EXTERNALCONTROL
   averaging: 5
@@ -14,12 +14,12 @@ config:
   xdcrUpDn: XDRCDOWN
   soundVelocity: 1500
   profFilter: BOTTOMFOLLOW
-  out83p83b: OUT83B
+  out83p83b: OUT83P
   trans: TRANSREC
-  profPtEnable: 0
+  profPtEnable: 1
   profTilt: 0
   profMinLev: 10
-  sectorSize: SEC120
+  sectorSize: SEC90
   dispGain: 50
   gain: 6
 # no documentation available for this property
