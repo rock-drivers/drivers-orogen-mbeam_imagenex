@@ -36,14 +36,59 @@ Orocos.run 'mbeam_imagenex::Task' => 'mbeam' do
         task_inspector = Vizkit.default_loader.task_inspector
         task_inspector.config(mbeam)
         task_inspector.show
-        Vizkit.exec
-    else
-	#reader = mbeam.mbeam_samples.reader
-        #Orocos.watch(alt) do
-        #    if sample = reader.read
-        #        pp sample
-        #    end
-        #end
+	sonarWidget = Vizkit.default_loader.SonarWidget
+	
+	writer = mbeam.gain.writer
+	sonarWidget.connect(SIGNAL('gainChanged(int)')) do |i|
+	  writer.write i
+	end	
+	
+	sonarWidget.setGain(mbeam.config.gain)
+	
+	writer1 = mbeam.range.writer
+	sonarWidget.connect(SIGNAL('rangeChanged(int)')) do |i|
+	  writer1.write i
+	end
+	
+	@range = case mbeam.config.range
+	  when :RANGE5
+	    5
+	  when :RANGE10
+	    10
+	  when :RANGE20
+	    20
+	  when :RANGE30
+	    30
+	  when :RANGE40
+	    40
+	  when :RANGE50
+	    50
+	  when :RANGE60
+	    60
+	  when :RANGE80
+	    80
+	  when :RANGE100
+	    100
+	  when :RANGE150
+	    150
+	  when :RANGE200
+	    200
+	  when :RANGE250
+	    250
+	  when :RANGE300
+	    300
+	  else
+	    5
+	end
+	
+	sonarWidget.setRange(@range)
+	
+	mbeam.mbeam_scan.connect_to do |data,_|
+	  sonarWidget.setData(data)
+	end
+	
+	sonarWidget.show
+	Vizkit.exec
     end
 end
 

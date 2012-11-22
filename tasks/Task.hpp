@@ -5,6 +5,7 @@
 
 #include "mbeam_imagenex/TaskBase.hpp"
 #include <mbeam_imagenex/Driver.hpp>
+//#include <mbeam_imagenex/MBeamSender.hpp>
 #include <base/logging.h>
 
 namespace mbeam_imagenex {
@@ -28,6 +29,7 @@ namespace mbeam_imagenex {
 	friend class TaskBase;
     protected:
 	Driver* mDriver;
+	//MBeamSender *mSender;
 
 
 

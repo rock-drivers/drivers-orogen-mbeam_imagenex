@@ -28,6 +28,12 @@ task_context "Task" do
     
     property "config", "mbeam_imagenex/Config"
     
+    input_port('gain', 'int').
+        doc "set gain"
+        
+    input_port('range', 'int').
+        doc "set range"
+        
     output_port("mbeam_scan","base::samples::SonarScan")
     
     periodic(0.1)

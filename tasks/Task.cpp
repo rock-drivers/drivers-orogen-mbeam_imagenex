@@ -31,11 +31,13 @@ bool Task::configureHook()
       delete mDriver;
       mbeam_imagenex::Config configuration = _config.get();
       mDriver = new mbeam_imagenex::Driver(configuration);
+      LOG_DEBUG("created Driver");
       if (!_io_port.get().empty())
       {
 	  mDriver->open(_io_port.get());
       }
       setDriver(mDriver);
+      LOG_DEBUG("set Driver");
       if (! TaskBase::configureHook())
 	  return false;
       return true;
@@ -64,10 +66,18 @@ bool Task::startHook()
 void Task::updateHook()
 {
   try{
-    mDriver->sendExtCmd();
+    LOG_DEBUG("updateHook");
+    int val;
+    if (_gain.read(val) == RTT::NewData) {
+       mDriver->setGain(val);
+    }      
+    if (_range.read(val) == RTT::NewData) {
+       mDriver->setRange(val);
+    }
     mDriver->collectData();
+    mDriver->sendExtCmd();
     _mbeam_scan.write(mDriver->getData());
-    TaskBase::updateHook();
+     TaskBase::updateHook();
   } catch(std::runtime_error &e){
     LOG_DEBUG("exception %s",e.what());
     error(COMM_ERROR);      
@@ -77,9 +87,9 @@ void Task::updateHook()
 
 void Task::errorHook()
 {
+    LOG_DEBUG("errorHook");
     TaskBase::errorHook();
     recover();
-
 }
 
 void Task::stopHook()
