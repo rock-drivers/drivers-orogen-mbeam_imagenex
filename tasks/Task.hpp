@@ -108,6 +108,8 @@ namespace mbeam_imagenex {
          * before calling start() again.
          */
          void cleanupHook();
+	 
+	 void processIO();
     };
 }
 

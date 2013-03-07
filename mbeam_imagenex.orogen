@@ -3,7 +3,7 @@ name "mbeam_imagenex"
 # version "0.1"
 
 using_library "mbeam_imagenex"
-#import_types_from "act_schilling/Error.hpp"
+import_types_from "base_schilling/Error.hpp"
 import_types_from "mbeam_imagenex/MBeamTypes.hpp"
 import_types_from "mbeam_imagenex/MBeamRaw.hpp"
 import_types_from "mbeam_imagenex/Config.hpp"
@@ -21,7 +21,7 @@ using_task_library "iodrivers_base"
 task_context "Task" do
     subclasses "iodrivers_base::Task"
     needs_configuration
-    
+    runtime_states :MONITORING
     error_states :COMM_ERROR
     
     property "config", "mbeam_imagenex/Config"
@@ -33,6 +33,8 @@ task_context "Task" do
         doc "set range"
         
     output_port("mbeam_scan","base::samples::SonarScan")
+    
+    output_port('log_message', 'oro_marum/LogMessage')
     
     periodic(0.1)
 end

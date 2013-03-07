@@ -1,8 +1,10 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Task.hpp"
+#include <base_schilling/Error.hpp>
 
 using namespace mbeam_imagenex;
+using namespace oro_marum;
 
 Task::Task(std::string const& name)
     : TaskBase(name),mDriver(0)
@@ -26,61 +28,45 @@ Task::~Task()
 
 bool Task::configureHook()
 {
-   try{
-      LOG_DEBUG("configureHook");
-      delete mDriver;
-      mbeam_imagenex::Config configuration = _config.get();
-      mDriver = new mbeam_imagenex::Driver(configuration);
-      LOG_DEBUG("created Driver");
-      if (!_io_port.get().empty())
-      {
-	  mDriver->open(_io_port.get());
-      }
-      setDriver(mDriver);
-      LOG_DEBUG("set Driver");
-      if (! TaskBase::configureHook())
-	  return false;
-      return true;
-    } catch(std::runtime_error &e){
-      LOG_DEBUG("exception %s",e.what());
-      error(COMM_ERROR);      
-      return false;
-    } 
+  delete mDriver;
+  mbeam_imagenex::Config configuration = _config.get();
+  mDriver = new mbeam_imagenex::Driver(configuration);
+  if (!_io_port.get().empty())
+  {
+    mDriver->open(_io_port.get());
+  }
+  setDriver(mDriver);
+  if (! TaskBase::configureHook())
+    return false;
+  return true;
 }
 
 bool Task::startHook()
 {
-   try{
-      LOG_DEBUG("start	Hook");
-      
-      if (! TaskBase::startHook())
-	  return false;
-      return true;
-    } catch(std::runtime_error &e){
-      LOG_DEBUG("exception %s",e.what());
-      error(COMM_ERROR);      
-      return false;
-    } 
+  if (! TaskBase::startHook())
+    return false;
+  return true;
 }
 
 void Task::updateHook()
 {
   try{
-    LOG_DEBUG("updateHook");
-    int val;
-    if (_gain.read(val) == RTT::NewData) {
-       mDriver->setGain(val);
+    switch(state()){
+      case RUNNING: {
+	processIO();
+	state(MONITORING);
+	break;
+      }
+      case MONITORING:{
+	processIO();
+	break;
+      }
+      default: break;
     }      
-    if (_range.read(val) == RTT::NewData) {
-       mDriver->setRange(val);
-    }
-    mDriver->collectData();
-    mDriver->sendExtCmd();
-    _mbeam_scan.write(mDriver->getData());
-     TaskBase::updateHook();
   } catch(std::runtime_error &e){
     LOG_DEBUG("exception %s",e.what());
-    error(COMM_ERROR);      
+    _log_message.write(LogMessage(e));
+    exception(IO_TIMEOUT);  
   }
 }
 
@@ -105,3 +91,16 @@ void Task::cleanupHook()
   TaskBase::cleanupHook();
 }
 
+void Task::processIO()
+{
+    int val;
+    if (_gain.read(val) == RTT::NewData) {
+       mDriver->setGain(val);
+    }      
+    if (_range.read(val) == RTT::NewData) {
+       mDriver->setRange(val);
+    }
+    mDriver->collectData();
+    mDriver->sendExtCmd();
+    _mbeam_scan.write(mDriver->getData());
+}
