@@ -3,6 +3,7 @@
   </description>
   <author>Sitta Buhmann/sbuhmann@marum.de</author>
   <license></license>
+  <depend package="base/orogen/types" />
   <depend package="drivers/orogen/iodrivers_base" />
   <depend package="drivers/mbeam_imagenex" />
   <depend package="drivers/base_schilling" />

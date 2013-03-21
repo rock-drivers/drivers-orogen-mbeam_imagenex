@@ -3,13 +3,11 @@ name "mbeam_imagenex"
 # version "0.1"
 
 using_library "mbeam_imagenex"
+import_types_from "base"
 import_types_from "base_schilling/Error.hpp"
 import_types_from "mbeam_imagenex/MBeamTypes.hpp"
 import_types_from "mbeam_imagenex/MBeamRaw.hpp"
 import_types_from "mbeam_imagenex/Config.hpp"
-import_types_from "base/samples/sonar_scan.h"
-
-
 
 using_task_library "iodrivers_base"
 
