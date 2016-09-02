@@ -6,7 +6,7 @@
 #include "mbeam_imagenex/TaskBase.hpp"
 #include <mbeam_imagenex/Driver.hpp>
 //#include <mbeam_imagenex/MBeamSender.hpp>
-#include <base/logging.h>
+#include <base-logging/Logging.hpp>
 
 namespace mbeam_imagenex {
 
